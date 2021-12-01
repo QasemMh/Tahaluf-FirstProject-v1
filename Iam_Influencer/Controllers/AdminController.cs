@@ -228,7 +228,7 @@ namespace Iam_Influencer.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(ManageRoles));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     ModelState.AddModelError("Id", "Id is already exists");
                     return View(_context.Roles.ToListAsync().Result);

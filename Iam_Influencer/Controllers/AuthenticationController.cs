@@ -44,7 +44,7 @@ namespace Iam_Influencer.Controllers
             {
 
                 var Authen = _context.Logins.
-                    Where(x => x.Username == user.Username &&
+                    Where(x => x.Username.ToLower() == user.Username.ToLower() &&
                     x.Password == user.Password).SingleOrDefault();
 
                 if (Authen != null)
@@ -53,17 +53,23 @@ namespace Iam_Influencer.Controllers
                     {
                         //3 >> customer
                         case 3:
+                            int customerId = (int)_context.Customers.Where(c => c.Id == Authen.CustomerId).FirstOrDefault().Id;
                             HttpContext.Session.SetString(USERNAME, Authen.Username);
+                            HttpContext.Session.SetInt32("customer", (int)customerId);
+                            HttpContext.Session.SetInt32("roleid", (int)Authen.RoleId);
                             return RedirectToAction("Index", "Customers");
 
                         case 2:
                             HttpContext.Session.SetString(USERNAME, Authen.Username);
-                            return RedirectToAction("Index", "Users");
+                            HttpContext.Session.SetInt32("roleid", (int)Authen.RoleId);
+                            HttpContext.Session.SetInt32("employee", (int)Authen.AccountatntId);
+                            return RedirectToAction("Index", "Employees");
 
                         case 1:
                             //1 >> Admin
                             HttpContext.Session.SetString(USERNAME, Authen.Username);
-                            HttpContext.Session.SetInt32("admin", (int)Authen.RoleId);
+                            HttpContext.Session.SetInt32("roleid", (int)Authen.RoleId);
+                            HttpContext.Session.SetInt32("admin", (int)Authen.Id);
                             return RedirectToAction("Index", "Admin");
 
                         default: return View(user);
@@ -94,6 +100,7 @@ namespace Iam_Influencer.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(UsersViewModel user)
         {
+            user.Username = user.Username.ToLower();
             if (IsUsernameExists(user.Username))
             {
                 ModelState.AddModelError("Username", "Username Is Already Exists");
@@ -101,12 +108,15 @@ namespace Iam_Influencer.Controllers
             }
 
             if (user.Email != null)
+            {
+                user.Email = user.Email.ToLower();
+
                 if (IsEmailExists(user.Email))
                 {
                     ModelState.AddModelError("Email", "Email Is Already Exists");
                     return View(user);
                 }
-
+            }
             Customer customer = new Customer();
 
             if (ModelState.IsValid)
@@ -161,6 +171,21 @@ namespace Iam_Influencer.Controllers
             {
                 HttpContext.Session.Remove("username");
             }
+
+            if (HttpContext.Session.GetInt32("admin") != null)
+            {
+                HttpContext.Session.Remove("admin");
+            }
+
+            if (HttpContext.Session.GetInt32("customer") != null)
+            {
+                HttpContext.Session.Remove("customer");
+            }
+            if (HttpContext.Session.GetInt32("employee") != null)
+            {
+                HttpContext.Session.Remove("employee");
+            }
+
             return RedirectToAction(nameof(Login));
         }
 

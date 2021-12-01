@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Iam_Influencer.Models.ViewModel;
 
 #nullable disable
 
@@ -9,6 +8,7 @@ namespace Iam_Influencer.Models
 {
     public partial class ModelContext : DbContext
     {
+
         public ModelContext()
         {
         }
@@ -36,6 +36,14 @@ namespace Iam_Influencer.Models
         public virtual DbSet<Slider> Sliders { get; set; }
         public virtual DbSet<Stutascode> Stutascodes { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseOracle("user id=train_user144;password=on12on12;data source=94.56.229.181:3488/traindb");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -471,13 +479,10 @@ namespace Iam_Influencer.Models
 
             modelBuilder.Entity<Review>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("REVIEWS");
 
                 entity.Property(e => e.Id)
                     .HasPrecision(11)
-                    .ValueGeneratedOnAdd()
                     .HasColumnName("ID");
 
                 entity.Property(e => e.Imagepath)
@@ -499,10 +504,7 @@ namespace Iam_Influencer.Models
                     .IsUnicode(false)
                     .HasColumnName("TEXT");
 
-                entity.Property(e => e.Title)
-                    .HasMaxLength(250)
-                    .IsUnicode(false)
-                    .HasColumnName("TITLE");
+
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -569,14 +571,17 @@ namespace Iam_Influencer.Models
 
             modelBuilder.Entity<Slider>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("SLIDER");
 
                 entity.Property(e => e.Id)
                     .HasPrecision(11)
-                    .ValueGeneratedOnAdd()
                     .HasColumnName("ID");
+
+                entity.Property(e => e.Imagepath)
+                    .IsRequired()
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasColumnName("IMAGEPATH");
 
                 entity.Property(e => e.Text)
                     .HasMaxLength(500)
@@ -615,6 +620,5 @@ namespace Iam_Influencer.Models
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
-        public DbSet<Iam_Influencer.Models.ViewModel.UsersViewModel> UsersViewModel { get; set; }
     }
 }

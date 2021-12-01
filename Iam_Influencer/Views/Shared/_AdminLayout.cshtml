@@ -11,13 +11,15 @@
 
     <title> @ViewData["Title"] </title>
 
+
     <!-- Custom fonts for this template-->
     <link href="~/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="~/dashboard/css/sb-admin-2.css" rel="stylesheet">
+    <link href="~/dashboard/css/sb-admin-2.css" rel="stylesheet" asp-append-version="true">
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true">
 
 </head>
 
@@ -30,13 +32,6 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
-            </a>
-
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
@@ -60,7 +55,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fas fa-fw fa-user"></i>
                     <span>Customers</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -76,7 +71,7 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse"
                    data-target="#collapse4"
                    aria-expanded="true" aria-controls="collapse4">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fas fa-fw fa-briefcase"></i>
                     <span>Employee</span>
                 </a>
                 <div id="collapse4" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -94,12 +89,33 @@
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse"
-                   data-target="#collapse3"
-                   aria-expanded="true" aria-controls="collapse3">
-                    <i class="fas fa-fw fa-cog"></i>
+                   data-target="#collapse4"
+                   aria-expanded="true" aria-controls="collapse4">
+                    <i class="fas fa-fw fa-briefcase"></i>
+                    <span>Products</span>
+                </a>
+                <div id="collapse4" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" asp-action=""
+                           asp-controller="Admin">All Product</a>
+                        <a class="collapse-item" asp-action="Index"
+                           asp-controller="Categories">Manage Categories</a>
+
+                    </div>
+
+                </div>
+            </li>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse"
+                   data-target="#collapse4"
+                   aria-expanded="true" aria-controls="collapse4">
+                    <i class="fas fa-fw fa-user-tag"></i>
                     <span>Roles</span>
                 </a>
-                <div id="collapse3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapse4" class="collapse" aria-labelledby="headingTwo"
+                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" asp-action="ManageRoles"
                            asp-controller="Admin">Manage Roles</a>
@@ -114,7 +130,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Addons
+                Website
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -122,18 +138,21 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                    aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
+                    <span>Manage Website</span>
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                        <h6 class="collapse-header">slider section</h6>
+                        <a class="collapse-item"
+                           asp-action="Index"
+                           asp-controller="Sliders">Sliders</a>
+
                         <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                        <h6 class="collapse-header">reviews section</h6>
+                        <a class="collapse-item"
+                           asp-action="Index"
+                           asp-controller="Reviews">Reviews</a>
+
                     </div>
                 </div>
             </li>

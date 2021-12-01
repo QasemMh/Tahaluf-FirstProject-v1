@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -26,5 +29,9 @@ namespace Iam_Influencer.Models
         public virtual ICollection<Customerpayment> Customerpayments { get; set; }
         public virtual ICollection<Product> Products { get; set; }
         public virtual ICollection<ShoppingSession> ShoppingSessions { get; set; }
+
+        [Display(Name = "Profile Picture")]
+        [NotMapped]
+        public IFormFile Image { get; set; }
     }
 }

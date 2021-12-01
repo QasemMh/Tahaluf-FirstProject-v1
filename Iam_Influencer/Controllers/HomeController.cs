@@ -25,22 +25,21 @@ namespace Iam_Influencer.Controllers
             var slider = await _context.Sliders.ToListAsync();
             var reviews = await _context.Reviews.ToListAsync();
 
+
             ContentViewModel viewModel = new ContentViewModel();
-            slider.ForEach(s =>
-            {
-                viewModel.SliderId = s.Id;
-                viewModel.SliderText = s.Text;
-                viewModel.SliderTitle = s.Title;
-            });
-            reviews.ForEach(r =>
-            {
-                viewModel.Id = r.Id;
-                viewModel.Text = r.Text;
-                viewModel.Title = r.Title;
-                viewModel.Imagepath = r.Imagepath;
-                viewModel.Name = r.Name;
-                viewModel.Starcount = r.Starcount;
-            });
+
+            viewModel.Sliders = slider;
+            viewModel.Reviews = reviews;
+
+            //reviews.ForEach(r =>
+            //{
+            //    viewModel.Id = r.Id;
+            //    viewModel.Text = r.Text;
+            //    viewModel.Title = r.Title;
+            //    viewModel.Imagepath = r.Imagepath;
+            //    viewModel.Name = r.Name;
+            //    viewModel.Starcount = r.Starcount;
+            //});
 
             return View(viewModel);
         }

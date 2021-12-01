@@ -8,8 +8,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
+    <link href="~/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
-    <title>@ViewData["Title"] - Iam_Influencer</title>
+    <title>@ViewData["Title"] - I'm Influencer</title>
 
     <!-- Bootstrap core CSS -->
     <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -46,10 +47,7 @@
                         <a class="nav-link"
                            asp-action="Products" asp-controller="Home">Products</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           asp-action="Contact" asp-controller="Home">Contact Us</a>
-                    </li>
+
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
@@ -61,9 +59,9 @@
         </div>
     </nav>
 
-    <div class="container-fluid">
-        @RenderBody()
-    </div>
+
+    @RenderBody()
+
 
     <!-- Footer Starts Here -->
     <div class="footer" style="position:relative">
@@ -78,10 +76,12 @@
                     <div class="footer-menu">
                         <ul>
                             <li><a href="#">Home</a></li>
-                            <li><a href="#">Help</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">How It Works ?</a></li>
-                            <li><a href="#">Contact Us</a></li>
+                            <li class="">
+                                <a class=""
+                                   asp-action="Products"
+                                   asp-controller="Home">Products</a>
+                            </li>
+
                         </ul>
                     </div>
                 </div>

@@ -1,0 +1,101 @@
+﻿@model Iam_Influencer.Models.Review
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">
+            Edit
+        </h6>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit" enctype="multipart/form-data">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Text" class="control-label"></label>
+                        <input asp-for="Text" class="form-control" />
+                        <span asp-validation-for="Text" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Starcount" class="control-label"></label>
+                        <input asp-for="Starcount" class="form-control" />
+                        <span asp-validation-for="Starcount" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+
+                <div class="md-col-6 text-center">
+                    <div class="form-group img-container">
+                        <input type="hidden" value="@Model.Imagepath" name="imagePath2" />
+                        <label asp-for="Image" class="w-100"></label>
+                        <div class="image-wrapper">
+
+                            <!--test for image-->
+                            <img src="~/images/@Model.Imagepath"
+                                 alt="photo" class="profile-img"
+                                 loading="lazy"
+                                 id="image_src"
+                                 asp-append-version="true" />
+
+                        </div>
+                        <div class="custom-file form-group">
+                            <input type="file"
+                                   accept="image/*"
+                                   asp-for="Image"
+                                   id="ImagePath"
+                                   onchange="previewImage(this)"
+                                   class="custom-file-input">
+                            <label class="custom-file-label" style="text-align:left" id="img_txt"
+                                   asp-for="Image">
+                                Choose Image
+                            </label>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+                <div class="col-md-6 mt-2">
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        function previewImage(e) {
+            let image = window.URL.createObjectURL(e.files[0]);
+            document.querySelector('#image_src').src = image;
+            document.querySelector('#img_txt').innerHTML = `${e.files[0].name} | ${image.length}Bytes`;
+        }
+    </script>
+
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

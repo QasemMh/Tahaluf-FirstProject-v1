@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+
+
+@if (HttpContextAccessor.HttpContext.Session.GetString("username") != null)
+{
+
+    <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+        Hello @HttpContextAccessor.HttpContext.Session.GetString("username")
+    </span>
+
+    <img class="img-profile rounded-circle"
+         id="userImageProfile"
+         src="~/dashboard/img/undraw_profile.svg">
+
+}
+else
+{
+    <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+        Hello User
+    </span>
+    <img class="img-profile rounded-circle"
+         src="~/dashboard/img/undraw_profile.svg">
+}
+
