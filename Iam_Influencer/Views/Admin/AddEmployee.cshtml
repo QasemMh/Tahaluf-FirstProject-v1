@@ -1,0 +1,78 @@
+﻿@model Iam_Influencer.Models.ViewModel.UsersViewModel;
+@{
+    ViewData["Title"] = "Add Employee";
+}
+
+<div class="card o-hidden border-0 shadow-lg my-5">
+    <div class="card-body p-0">
+        <!-- Nested Row within Card Body -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="p-5">
+                    <div class="text-center">
+                        <h1 class="h4 text-gray-900 mb-4">Add Employee!</h1>
+                    </div>
+                    <form asp-action="AddEmployee" class="user">
+                        <div class="form-group row">
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <input asp-for="FirstName" class="form-control "
+                                       placeholder="First Name" required>
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+
+                            </div>
+                            <div class="col-sm-6">
+                                <input asp-for="LastName" class="form-control "
+                                       placeholder="Last Name" required>
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="Username" class="form-control "
+                                   placeholder="Username" required>
+                            <span asp-validation-for="Username" class="text-danger"></span>
+
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="Email" class="form-control "
+                                   placeholder="Email Address(optional)">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <input asp-for="Password" class="form-control "
+                                       placeholder="Password">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+
+                            </div>
+                            <div class="col-sm-6">
+                                <input asp-for="RePassword" class="form-control "
+                                       placeholder="Repeat Password" required>
+                                <span asp-validation-for="RePassword" class="text-danger"></span>
+
+                            </div>
+                        </div>
+
+
+
+                        <button type="submit" class="mt-4 btn btn-primary btn-user btn-block">
+                            Add
+                        </button>
+                    </form>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <hr>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

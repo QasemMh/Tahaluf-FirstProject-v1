@@ -1,0 +1,122 @@
+﻿@model IEnumerable<Iam_Influencer.Models.ViewModel.UsersViewModel>
+
+@{
+    ViewData["Title"] = "Manage Employee";
+}
+
+@*  *@
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">
+            <a asp-action="AddEmployee" class="btn btn-primary">Create New</a>
+        </h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Username)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RoleName)
+                        </th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Username)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RoleName)
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Username)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RoleName)
+                            </td>
+
+                            <td>
+                                <a asp-action="EditEmployee" class="btn btn-outline-primary"
+                                   asp-route-id="@item.Id">Edit</a>
+
+                                <a href="javascript:;"
+                                   class="btn btn-outline-danger js__user-delete"
+                                   data-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+
+    <script src="~/lib/bootbox.js/bootbox.min.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $(".js__user-delete").on("click", function () {
+                let btn = $(this);
+
+                bootbox.confirm({
+                    message: "Are you sure you want to DELETE the user?",
+                    buttons: {
+                        confirm: {
+                            label: 'DELETE',
+                            className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'CANCEL',
+                            className: 'btn-secondary'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            fetch("/api/Employees?id=" + btn.data("id"),
+                                {
+                                    method: "DELETE"
+                                }
+                            ).then(respon => {
+                                btn.parents("tr").fadeOut();
+                            }).catch(error => { alert("Error on delete employee - " + error) })
+
+                        }
+                    }
+                });
+
+
+            })
+        })
+
+
+    </script>
+}

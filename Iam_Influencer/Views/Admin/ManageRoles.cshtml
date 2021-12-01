@@ -1,0 +1,115 @@
+﻿@model IEnumerable<Iam_Influencer.Models.Role>
+
+@{
+    ViewData["Title"] = "ManageRoles";
+}
+
+
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">
+            <partial name="_AddRoles" model="new Role()">
+        </h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Id)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Id)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                <a href="javascript:;"
+                                   class="btn btn-outline-danger m-1 js__user-delete"
+                                   data-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts{
+
+
+    <script src="~/lib/bootbox.js/bootbox.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".js__user-delete").on("click", function () {
+                let btn = $(this);
+
+                bootbox.confirm({
+                    message: "Are you sure you want to DELETE the user?",
+                    buttons: {
+                        confirm: {
+                            label: 'DELETE',
+                            className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'CANCEL',
+                            className: 'btn-secondary'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            fetch("/api/Roles?id=" + btn.data("id"),
+                                {
+                                    method: "DELETE"
+                                }
+                            ).then(respon => {
+                                btn.parents("tr").fadeOut();
+                            }).catch(error => { alert("Error" + error) })
+
+                        }
+                    }
+                });
+
+
+            })
+        })
+
+
+      @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    </script>
+}
+
