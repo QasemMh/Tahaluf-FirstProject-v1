@@ -167,24 +167,7 @@ namespace Iam_Influencer.Controllers
 
         public IActionResult Logout()
         {
-            if (HttpContext.Session.GetString("username") != null)
-            {
-                HttpContext.Session.Remove("username");
-            }
-
-            if (HttpContext.Session.GetInt32("admin") != null)
-            {
-                HttpContext.Session.Remove("admin");
-            }
-
-            if (HttpContext.Session.GetInt32("customer") != null)
-            {
-                HttpContext.Session.Remove("customer");
-            }
-            if (HttpContext.Session.GetInt32("employee") != null)
-            {
-                HttpContext.Session.Remove("employee");
-            }
+            HttpContext.Session.Clear();
 
             return RedirectToAction(nameof(Login));
         }

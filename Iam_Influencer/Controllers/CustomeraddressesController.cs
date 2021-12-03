@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Iam_Influencer.Controllers
 {
+
     public class CustomeraddressesController : Controller
     {
         private readonly ModelContext _context;
@@ -19,11 +20,6 @@ namespace Iam_Influencer.Controllers
             _context = context;
         }
 
-        // GET: Customeraddresses
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Customeraddresses.ToListAsync());
-        }
 
         // GET: Customeraddresses/Details/5
         public async Task<IActionResult> Details()
@@ -75,10 +71,11 @@ namespace Iam_Influencer.Controllers
                 var customer = await _context.Customers.Where(c => c.Id == customerId).FirstOrDefaultAsync();
                 if (customer == null) return NotFound();
 
+                _context.Customeraddresses.Add(customeraddress);
+                await _context.SaveChangesAsync();
+
                 customer.AddressId = customeraddress.Id;
                 _context.Customers.Update(customer);
-                _context.Customeraddresses.Add(customeraddress);
-
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Details));
@@ -127,7 +124,7 @@ namespace Iam_Influencer.Controllers
             {
                 try
                 {
-                    _context.Update(customeraddress);
+                    _context.Customeraddresses.Update(customeraddress);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

@@ -7,6 +7,11 @@ namespace Iam_Influencer.Models
 {
     public partial class Customeraddress
     {
+        public Customeraddress()
+        {
+            Customers = new HashSet<Customer>();
+        }
+
         public long Id { get; set; }
         public string Countray { get; set; }
         public string City { get; set; }
@@ -14,6 +19,6 @@ namespace Iam_Influencer.Models
         public string Phone { get; set; }
         public string Email { get; set; }
 
-        public virtual Customer Customer { get; set; }
+        public virtual ICollection<Customer> Customers { get; set; }
     }
 }

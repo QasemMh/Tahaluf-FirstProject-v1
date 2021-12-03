@@ -8,7 +8,6 @@ namespace Iam_Influencer.Models
 {
     public partial class ModelContext : DbContext
     {
-
         public ModelContext()
         {
         }
@@ -36,14 +35,6 @@ namespace Iam_Influencer.Models
         public virtual DbSet<Slider> Sliders { get; set; }
         public virtual DbSet<Stutascode> Stutascodes { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseOracle("user id=train_user144;password=on12on12;data source=94.56.229.181:3488/traindb");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -105,9 +96,6 @@ namespace Iam_Influencer.Models
             {
                 entity.ToTable("CUSTOMER");
 
-                entity.HasIndex(e => e.AddressId, "SYS_C0079669")
-                    .IsUnique();
-
                 entity.Property(e => e.Id)
                     .HasPrecision(11)
                     .HasColumnName("ID");
@@ -139,9 +127,10 @@ namespace Iam_Influencer.Models
                     .HasColumnName("MIDNAME");
 
                 entity.HasOne(d => d.Address)
-                    .WithOne(p => p.Customer)
-                    .HasForeignKey<Customer>(d => d.AddressId)
-                    .HasConstraintName("SYS_C0079670");
+                    .WithMany(p => p.Customers)
+                    .HasForeignKey(d => d.AddressId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("SYS_FK_ADDRESS");
             });
 
             modelBuilder.Entity<Customeraddress>(entity =>
@@ -189,9 +178,14 @@ namespace Iam_Influencer.Models
                     .HasColumnName("ID");
 
                 entity.Property(e => e.AccountId)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("ACCOUNT_ID");
+
+                entity.Property(e => e.Balance)
+                    .HasColumnType("NUMBER(9,3)")
+                    .HasColumnName("BALANCE");
 
                 entity.Property(e => e.CustomerId)
                     .HasPrecision(11)
@@ -295,11 +289,13 @@ namespace Iam_Influencer.Models
                 entity.HasOne(d => d.Accountatnt)
                     .WithOne(p => p.Login)
                     .HasForeignKey<Login>(d => d.AccountatntId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("SYS_C0079746");
 
                 entity.HasOne(d => d.Customer)
                     .WithOne(p => p.Login)
                     .HasForeignKey<Login>(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("SYS_C0079747");
 
                 entity.HasOne(d => d.Role)
@@ -321,6 +317,10 @@ namespace Iam_Influencer.Models
                     .HasPrecision(6)
                     .HasColumnName("CREATEDDATE");
 
+                entity.Property(e => e.CustomerId)
+                    .HasPrecision(11)
+                    .HasColumnName("CUSTOMER_ID");
+
                 entity.Property(e => e.PaymentdetailsId)
                     .HasPrecision(11)
                     .HasColumnName("PAYMENTDETAILS_ID");
@@ -337,16 +337,20 @@ namespace Iam_Influencer.Models
                     .HasColumnType("NUMBER(7,3)")
                     .HasColumnName("TOTAL");
 
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Orederdetails)
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("SYS_C0097405");
+
                 entity.HasOne(d => d.Paymentdetails)
                     .WithMany(p => p.Orederdetails)
                     .HasForeignKey(d => d.PaymentdetailsId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("SYS_C0079719");
 
                 entity.HasOne(d => d.Shipping)
                     .WithMany(p => p.Orederdetails)
                     .HasForeignKey(d => d.ShippingId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("SYS_C0079720");
 
                 entity.HasOne(d => d.Stutascode)
@@ -465,6 +469,10 @@ namespace Iam_Influencer.Models
                     .HasPrecision(11)
                     .HasColumnName("SALE");
 
+                entity.Property("Description")
+                        .HasMaxLength(250)
+                        .HasColumnName("DESCRIPTION");
+
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CategoryId)
@@ -504,7 +512,10 @@ namespace Iam_Influencer.Models
                     .IsUnicode(false)
                     .HasColumnName("TEXT");
 
-
+                entity.Property(e => e.Title)
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasColumnName("TITLE");
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -619,6 +630,5 @@ namespace Iam_Influencer.Models
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
     }
 }

@@ -16,6 +16,9 @@ namespace Iam_Influencer.Models
         public string Method { get; set; }
         public decimal Charge { get; set; }
 
+
+
+
         public virtual ICollection<Orederdetail> Orederdetails { get; set; }
     }
 }
