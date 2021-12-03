@@ -7,18 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Iam_Influencer.Models;
 using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Iam_Influencer.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly ModelContext _context;
-
-        public ProductsController(ModelContext context)
+        readonly IWebHostEnvironment _hostEnvironment;
+        public ProductsController(ModelContext context, IWebHostEnvironment host)
         {
             _context = context;
+            _hostEnvironment = host;
         }
-
         // GET: Products
         public async Task<IActionResult> Index()
         {
@@ -74,11 +76,23 @@ namespace Iam_Influencer.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Imagepath,Sale,Price,CategoryId,CustomerId")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Sale,Price,CategoryId,CustomerId,Image")] Product product)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
+                var img = product.Image;
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string fileName = Guid.NewGuid().ToString() + "_" + img.FileName;
+                //save omage name in db
+                product.Imagepath = fileName;
+                var path = Path.Combine(wwwRootPath + "/images/" + fileName);
+                //save image in server
+                using (var st = new FileStream(path, FileMode.Create))
+                {
+                    await img.CopyToAsync(st);
+                }
+
+                _context.Products.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -117,7 +131,7 @@ namespace Iam_Influencer.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Name,Imagepath,Sale,Price,CategoryId,CustomerId")] Product product)
+        public async Task<IActionResult> Edit(long id, string imagePath2, [Bind("Id,Name,Imagepath,Sale,Price,CategoryId,CustomerId")] Product product)
         {
             if (id != product.Id)
             {
@@ -128,7 +142,25 @@ namespace Iam_Influencer.Controllers
             {
                 try
                 {
-                    _context.Update(product);
+                    if (Request.Form.Files.Count > 0)
+                    {
+                        var img = product.Image;
+                        string wwwRootPath = _hostEnvironment.WebRootPath;
+                        string fileName = Guid.NewGuid().ToString() + "__" + img.FileName;
+                        //save omage name in db
+                        product.Imagepath = fileName;
+                        var path = Path.Combine(wwwRootPath + "/images/" + fileName);
+                        //save image in server
+                        using (var st = new FileStream(path, FileMode.Create))
+                        {
+                            await img.CopyToAsync(st);
+                        }
+                    }
+                    else
+                    {
+                        product.Imagepath = imagePath2;
+                    }
+                    _context.Products.Update(product);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

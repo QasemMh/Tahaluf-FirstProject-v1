@@ -110,13 +110,16 @@
             </div>
             <div class="col-md-12">
                 <div class="owl-carousel owl-theme">
-                    <a href="single-product.html">
-                        <div class="featured-item">
-                            <img src="assets/images/item-01.jpg" alt="Item 1">
-                            <h4>Proin vel ligula</h4>
-                            <h6>$15.00</h6>
-                        </div>
-                    </a>
+                    @foreach (Product item in Model.Products)
+                    {
+                        <a href="#">
+                            <div class="featured-item">
+                                <img src="~/images/@item.Imagepath" alt="photo">
+                                <h4>@item.Name</h4>
+                                <h6>$@item.Price</h6>
+                            </div>
+                        </a>
+                    }
 
                 </div>
             </div>

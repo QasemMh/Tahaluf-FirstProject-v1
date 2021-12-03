@@ -10,112 +10,114 @@ using Microsoft.AspNetCore.Http;
 
 namespace Iam_Influencer.Controllers
 {
-
-    public class CustomeraddressesController : Controller
+    public class CustomerpaymentsController : Controller
     {
         private readonly ModelContext _context;
 
-        public CustomeraddressesController(ModelContext context)
+        public CustomerpaymentsController(ModelContext context)
         {
             _context = context;
         }
 
-
-        // GET: Customeraddresses/Details/5
-        public async Task<IActionResult> Details()
+        // GET: Customerpayments
+        public async Task<IActionResult> Index()
         {
             if (!HttpContext.Session.GetInt32("customer").HasValue)
             {
                 return RedirectToAction("Login", "Authentication");
             }
             int customerId = (int)HttpContext.Session.GetInt32("customer");
-            var customer = await _context.Customers.Where(c => c.Id == customerId).FirstOrDefaultAsync();
 
-            if (customer.AddressId == null)
-            {
-                return NotFound();
-            }
+            var modelContext = _context.Customerpayments.
+                Where(c => c.CustomerId == customerId).Include(c => c.Customer);
 
-            var customeraddress = await _context.Customeraddresses
-                .FirstOrDefaultAsync(m => m.Id == customer.AddressId);
-            if (customeraddress == null)
-            {
-                return NotFound();
-            }
-
-            return View(customeraddress);
+            return View(await modelContext.ToListAsync());
         }
 
-        // GET: Customeraddresses/Create
+        // GET: Customerpayments/Details/5
+        public async Task<IActionResult> Details(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var customerpayment = await _context.Customerpayments
+                .Include(c => c.Customer)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (customerpayment == null)
+            {
+                return NotFound();
+            }
+
+            return View(customerpayment);
+        }
+
+        // GET: Customerpayments/Create
         public IActionResult Create()
         {
             if (!HttpContext.Session.GetInt32("customer").HasValue)
             {
                 return RedirectToAction("Login", "Authentication");
             }
-            int CustomerId = (int)HttpContext.Session.GetInt32("customer");
-            ViewBag.customerId = CustomerId;
+            int customerId = (int)HttpContext.Session.GetInt32("customer");
+            ViewData["CustomerId"] = customerId;
+
             return View();
         }
 
-        // POST: Customeraddresses/Create
+        // POST: Customerpayments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Countray,City,Street,Phone,Email")] Customeraddress customeraddress,
-            int customerId)
+        public async Task<IActionResult> Create([Bind("Id,Balance,AccountId,ExpierDate,PaymentType,Provider,CustomerId")] Customerpayment customerpayment)
         {
             if (ModelState.IsValid)
             {
-                var customer = await _context.Customers.Where(c => c.Id == customerId).FirstOrDefaultAsync();
-                if (customer == null) return NotFound();
-
-                _context.Customeraddresses.Add(customeraddress);
+                _context.Customerpayments.Add(customerpayment);
                 await _context.SaveChangesAsync();
-
-                customer.AddressId = customeraddress.Id;
-                _context.Customers.Update(customer);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Details));
+                return RedirectToAction(nameof(Index));
             }
-
-            int CustomerId = (int)HttpContext.Session.GetInt32("customer");
-            ViewBag.customerId = CustomerId;
-            return View(customeraddress);
-        }
-
-        // GET: Customeraddresses/Edit/5
-        public async Task<IActionResult> Edit()
-        {
             if (!HttpContext.Session.GetInt32("customer").HasValue)
             {
                 return RedirectToAction("Login", "Authentication");
             }
             int customerId = (int)HttpContext.Session.GetInt32("customer");
-            var customer = await _context.Customers.Where(c => c.Id == customerId).FirstOrDefaultAsync();
-            if (customer.AddressId == null)
-            {
-                return NotFound();
-            }
-
-            var customeraddress = await _context.Customeraddresses.FindAsync(customer.AddressId);
-            if (customeraddress == null)
-            {
-                return NotFound();
-            }
-            return View(customeraddress);
+            ViewData["CustomerId"] = customerId;
+            return View(customerpayment);
         }
 
-        // POST: Customeraddresses/Edit/5
+        // GET: Customerpayments/Edit/5
+        public async Task<IActionResult> Edit(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var customerpayment = await _context.Customerpayments.FindAsync(id);
+            if (customerpayment == null)
+            {
+                return NotFound();
+            }
+            if (!HttpContext.Session.GetInt32("customer").HasValue)
+            {
+                return RedirectToAction("Login", "Authentication");
+            }
+            int customerId = (int)HttpContext.Session.GetInt32("customer");
+            ViewData["CustomerId"] = customerId;
+            return View(customerpayment);
+        }
+
+        // POST: Customerpayments/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Countray,City,Street,Phone,Email")] Customeraddress customeraddress)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,AccountId,ExpierDate,PaymentType,Provider,Balance,CustomerId")] Customerpayment customerpayment)
         {
-            if (id != customeraddress.Id)
+            if (id != customerpayment.Id)
             {
                 return NotFound();
             }
@@ -124,12 +126,12 @@ namespace Iam_Influencer.Controllers
             {
                 try
                 {
-                    _context.Customeraddresses.Update(customeraddress);
+                    _context.Customerpayments.Update(customerpayment);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomeraddressExists(customeraddress.Id))
+                    if (!CustomerpaymentExists(customerpayment.Id))
                     {
                         return NotFound();
                     }
@@ -140,48 +142,49 @@ namespace Iam_Influencer.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(customeraddress);
-        }
 
-        // GET: Customeraddresses/Delete/5
-        public async Task<IActionResult> Delete()
-        {
             if (!HttpContext.Session.GetInt32("customer").HasValue)
             {
                 return RedirectToAction("Login", "Authentication");
             }
             int customerId = (int)HttpContext.Session.GetInt32("customer");
-            var customer = await _context.Customers.Where(c => c.Id == customerId).FirstOrDefaultAsync();
-
-            if (customer.AddressId == null)
-            {
-                return NotFound();
-            }
-
-            var customeraddress = await _context.Customeraddresses
-                .FirstOrDefaultAsync(m => m.Id == customer.AddressId);
-            if (customeraddress == null)
-            {
-                return NotFound();
-            }
-
-            return View(customeraddress);
+            ViewData["CustomerId"] = customerId;
+            return View(customerpayment);
         }
 
-        // POST: Customeraddresses/Delete/5
+        // GET: Customerpayments/Delete/5
+        public async Task<IActionResult> Delete(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var customerpayment = await _context.Customerpayments
+                .Include(c => c.Customer)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (customerpayment == null)
+            {
+                return NotFound();
+            }
+
+            return View(customerpayment);
+        }
+
+        // POST: Customerpayments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var customeraddress = await _context.Customeraddresses.FindAsync(id);
-            _context.Customeraddresses.Remove(customeraddress);
+            var customerpayment = await _context.Customerpayments.FindAsync(id);
+            _context.Customerpayments.Remove(customerpayment);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CustomeraddressExists(long id)
+        private bool CustomerpaymentExists(long id)
         {
-            return _context.Customeraddresses.Any(e => e.Id == id);
+            return _context.Customerpayments.Any(e => e.Id == id);
         }
     }
 }

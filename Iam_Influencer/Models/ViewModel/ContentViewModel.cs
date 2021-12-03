@@ -10,5 +10,8 @@ namespace Iam_Influencer.Models.ViewModel
         public List<Slider> Sliders { get; set; }
 
         public List<Review> Reviews { get; set; }
+        public List<Product> Products { get; set; }
+
+
     }
 }

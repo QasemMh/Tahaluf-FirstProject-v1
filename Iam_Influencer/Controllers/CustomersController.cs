@@ -77,7 +77,7 @@ namespace Iam_Influencer.Controllers
             {
                 return NotFound();
             }
-            ViewData["AddressId"] = new SelectList(_context.Customeraddresses, "Id", "City", customer.AddressId);
+            ViewData["AddressId"] = customer.AddressId;
             return View(customer);
         }
 
@@ -130,7 +130,7 @@ namespace Iam_Influencer.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AddressId"] = new SelectList(_context.Customeraddresses, "Id", "City", customer.AddressId);
+            ViewData["AddressId"] = customer.AddressId;
             return View(customer);
         }
 

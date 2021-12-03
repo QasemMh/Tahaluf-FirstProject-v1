@@ -8,7 +8,6 @@ namespace Iam_Influencer.Models
 {
     public partial class ModelContext : DbContext
     {
-
         public ModelContext()
         {
         }
@@ -36,14 +35,7 @@ namespace Iam_Influencer.Models
         public virtual DbSet<Slider> Sliders { get; set; }
         public virtual DbSet<Stutascode> Stutascodes { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseOracle("user id=train_user144;password=on12on12;data source=94.56.229.181:3488/traindb");
-            }
-        }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -105,9 +97,6 @@ namespace Iam_Influencer.Models
             {
                 entity.ToTable("CUSTOMER");
 
-                entity.HasIndex(e => e.AddressId, "SYS_C0079669")
-                    .IsUnique();
-
                 entity.Property(e => e.Id)
                     .HasPrecision(11)
                     .HasColumnName("ID");
@@ -139,9 +128,10 @@ namespace Iam_Influencer.Models
                     .HasColumnName("MIDNAME");
 
                 entity.HasOne(d => d.Address)
-                    .WithOne(p => p.Customer)
-                    .HasForeignKey<Customer>(d => d.AddressId)
-                    .HasConstraintName("SYS_C0079670");
+                    .WithMany(p => p.Customers)
+                    .HasForeignKey(d => d.AddressId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("SYS_FK_ADDRESS");
             });
 
             modelBuilder.Entity<Customeraddress>(entity =>
@@ -210,6 +200,9 @@ namespace Iam_Influencer.Models
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("PROVIDER");
+
+                entity.Property("Balance").HasPrecision(9).
+                HasColumnName("BALANCE");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Customerpayments)
@@ -504,7 +497,10 @@ namespace Iam_Influencer.Models
                     .IsUnicode(false)
                     .HasColumnName("TEXT");
 
-
+                entity.Property(e => e.Title)
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasColumnName("TITLE");
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -619,6 +615,5 @@ namespace Iam_Influencer.Models
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
     }
 }

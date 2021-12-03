@@ -5,30 +5,23 @@
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-<h1>Edit</h1>
 
-<h4>Product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+<!-- DataTales Example -->
+<form asp-action="Edit" enctype="multipart/form-data">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+                Edit Product
+            </h6>
+        </div>
+        <div class="card-body">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Imagepath" class="control-label"></label>
-                <input asp-for="Imagepath" class="form-control" />
-                <span asp-validation-for="Imagepath" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Sale" class="control-label"></label>
-                <input asp-for="Sale" class="form-control" />
-                <span asp-validation-for="Sale" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
@@ -36,22 +29,68 @@
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                <select asp-for="CategoryId" class="form-control" asp-items="@ViewBag.CategoryId">
+                    <option disabled>---select---</option>
+                </select>
             </div>
+
             <input type="hidden" asp-for="CustomerId" value="@ViewBag.customerId " />
+            <input type="hidden" value="@Model.Imagepath" name="imagePath2" />
 
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+
+            <div class="md-col-6 text-center">
+                <div class="form-group img-container">
+                    <label asp-for="Image" class="w-100"></label>
+                    <div class="image-wrapper">
+
+                        <!--test for image-->
+                        <img src="~/images/@Model.Imagepath"
+                             alt="photo" class="profile-img"
+                             loading="lazy"
+                             id="image_src"
+                             asp-append-version="true" />
+
+                    </div>
+                    <div class="custom-file form-group">
+                        <input type="file"
+                               accept="image/*"
+                               asp-for="Image"
+                               id="ImagePath"
+                               onchange="previewImage(this)"
+                               class="custom-file-input">
+                        <label class="custom-file-label" style="text-align:left" id="img_txt"
+                               asp-for="Image">
+                            Choose Image
+                        </label>
+                    </div>
+                    <span asp-validation-for="Imagepath" class="text-danger"></span>
+                </div>
             </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+        </div>
+        <div class="card-footer text-muted">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</form>
+
+
 
 @section Scripts {
+
+    <script>
+
+        function previewImage(e) {
+            let image = window.URL.createObjectURL(e.files[0]);
+            document.querySelector('#image_src').src = image;
+            document.querySelector('#img_txt').innerHTML = `${e.files[0].name} | ${image.length}Bytes`;
+        }
+    </script>
+
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
