@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 #nullable disable
 
 namespace Iam_Influencer.Models
@@ -13,6 +15,13 @@ namespace Iam_Influencer.Models
             Orederitems = new HashSet<Orederitem>();
         }
 
+
+
+        [Display(Name = "Profile Picture")]
+        [NotMapped]
+        public IFormFile Image { get; set; }
+
+        public string Description { get; set; }
         public long Id { get; set; }
         public string Name { get; set; }
         public string Imagepath { get; set; }

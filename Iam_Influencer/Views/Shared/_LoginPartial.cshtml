@@ -19,9 +19,24 @@
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark">
-                Welcome  @HttpContextAccessor.HttpContext.Session.GetString("username")
-            </a>
+            @if (HttpContextAccessor.HttpContext.Session.GetInt32("roleid") == 3)
+            {
+                <a asp-action="Index" asp-controller="Customers" class="nav-link text-dark">
+                    Welcome  @HttpContextAccessor.HttpContext.Session.GetString("username")
+                </a>
+            }
+            else if (HttpContextAccessor.HttpContext.Session.GetInt32("roleid") == 2)
+            {
+                <a asp-action="Index" asp-controller="Employees" class="nav-link text-dark">
+                    Welcome  @HttpContextAccessor.HttpContext.Session.GetString("username")
+                </a>
+            }
+            else if (HttpContextAccessor.HttpContext.Session.GetInt32("roleid") == 1)
+            {
+                <a asp-action="Index" asp-controller="Admin" class="nav-link text-dark">
+                    Welcome  @HttpContextAccessor.HttpContext.Session.GetString("username")
+                </a>
+            }
         </li>
 
         <li class="nav-item">

@@ -1,0 +1,108 @@
+﻿@model Iam_Influencer.Models.ViewModel.ProductViewModel
+
+@{
+    ViewData["Title"] = "ViewProducts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- Page Content -->
+<!-- Single Starts Here -->
+<div class="single-product">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-heading">
+                    <div class="line-dec"></div>
+                    <h1>Single Product - @Model.product.Name</h1>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="product-slider">
+                    <div id="slider" class="flexslider">
+                        <ul class="slides">
+                            <li>
+                                <img src="~/images/@Model.product.Imagepath" />
+                            </li>
+
+                            <!-- items mirrored twice, total of 12 -->
+                        </ul>
+                    </div>
+                    <div id="carousel" class="flexslider">
+                        <ul class="slides">
+                            <li>
+                                <img src="~/images/@Model.product.Imagepath" />
+                            </li>
+
+                            <!-- items mirrored twice, total of 12 -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="right-content">
+                    <h4>@Model.product.Name</h4>
+                    <h6>$@Model.product.Price</h6>
+                    <p>@Model.product.Description </p>
+                    <span>7 left on stock</span>
+                    <form action="" method="get">
+                        <label for="quantity">Quantity:</label>
+                        <input name="quantity" type="number" class="quantity-text" id="quantity"
+                               onfocus="if(this.value == '1') { this.value = ''; }"
+                               onBlur="if(this.value == '') { this.value = '1';}"
+                               value="1" max="7" min="0">
+                        <input type="submit" class="button" value="Order Now!">
+                    </form>
+                    <div class="down-content">
+                        <div class="categories">
+                            <h6>Category: <span> <a href="#">@ViewBag.category</a> </span></h6>
+                        </div>
+                        <div class="share">
+                            <h6>Share: <span><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i class="fa fa-twitter"></i></a></span></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@if (Model.newProducts.Count >= 2)
+{
+    <!-- Single Page Ends Here -->
+    <!-- Similar Starts Here -->
+    <div class="featured-items">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="section-heading">
+                        <div class="line-dec"></div>
+                        <h1>You May Also Like</h1>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="owl-carousel owl-theme">
+                        @foreach (var item in Model.newProducts)
+                        {
+
+                            <a href="single-product.html">
+                                <div class="featured-item">
+                                    <img src="~/images/@item.Imagepath" alt="Item @item.Id">
+                                    <h4>@item.Name</h4>
+                                    <h6>$@item.Price</h6>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Similar Ends Here -->
+}
+@section Scripts{
+    <script src="~/assets/js/isotope.js"></script>
+    <script src="~/assets/js/flex-slider.js"></script>
+}

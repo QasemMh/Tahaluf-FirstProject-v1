@@ -9,10 +9,11 @@ namespace Iam_Influencer.Models
     {
         public long Id { get; set; }
         public string AccountId { get; set; }
-        public DateTime? ExpierDate { get; set; }
+        public DateTime ExpierDate { get; set; }
         public string PaymentType { get; set; }
         public string Provider { get; set; }
         public long CustomerId { get; set; }
+        public decimal Balance { get; set; }
 
         public virtual Customer Customer { get; set; }
     }
