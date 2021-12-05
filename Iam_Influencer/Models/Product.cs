@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Http;
+ 
 #nullable disable
 
 namespace Iam_Influencer.Models
@@ -29,6 +31,10 @@ namespace Iam_Influencer.Models
         public decimal Price { get; set; }
         public long? CategoryId { get; set; }
         public long CustomerId { get; set; }
+
+
+        [NotMapped]
+        public IFormFile Image { get; set; }
 
         public virtual Category Category { get; set; }
         public virtual Customer Customer { get; set; }

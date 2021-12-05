@@ -35,6 +35,7 @@ namespace Iam_Influencer.Models
         public virtual DbSet<Slider> Sliders { get; set; }
         public virtual DbSet<Stutascode> Stutascodes { get; set; }
 
+ 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -204,6 +205,9 @@ namespace Iam_Influencer.Models
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("PROVIDER");
+
+                entity.Property("Balance").HasPrecision(9).
+                HasColumnName("BALANCE");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Customerpayments)

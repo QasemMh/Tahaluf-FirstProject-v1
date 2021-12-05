@@ -112,13 +112,14 @@
                 <div class="owl-carousel owl-theme">
                     @foreach (Product item in Model.Products)
                     {
-                        <a asp-action="ViewProducts"
+                         <a asp-action="ViewProducts"
                            asp-controller="Home" asp-route-id="@item.Id">
                             <div class="featured-item">
                                 <img src="~/images/@item.Imagepath" alt="photo">
                                 <h4>
                                     @item.Name
                                 </h4>
+ 
                                 <h6>$@item.Price</h6>
                             </div>
                         </a>
