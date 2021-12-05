@@ -7,6 +7,8 @@ namespace Iam_Influencer.Models.ViewModel
 {
     public class ProductViewModel
     {
+         public Product product { get; set; }
+ 
         public List<Product> products { get; set; }
         public List<Product> newProducts { get; set; }
     }

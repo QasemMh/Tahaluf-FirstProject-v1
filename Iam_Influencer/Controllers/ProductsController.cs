@@ -198,9 +198,9 @@ namespace Iam_Influencer.Controllers
             }
 
             var product = await _context.Products
-                .Include(p => p.Category)
-                .Include(p => p.Customer)
-                .FirstOrDefaultAsync(m => m.Id == id);
+    .Include(p => p.Category)
+    .Include(p => p.Customer)
+    .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
                 return NotFound();

@@ -63,16 +63,27 @@ namespace Iam_Influencer.Controllers
         {
             if (id == null) return NotFound();
 
+ 
+            ProductViewModel viewModel = new ProductViewModel();
+
             var product = await _context.Products.
                 Where(p => p.Id == id).FirstOrDefaultAsync();
 
             if (product == null) return NotFound();
 
+            viewModel.product = product;
+
+ 
             var category = await _context.Categories.
                 Where(cat => cat.Id == product.CategoryId).FirstOrDefaultAsync();
             ViewData["category"] = category.Name;
 
-            return View(product);
+ 
+            var sameProducts = await _context.Products.
+                Where(cat => cat.CategoryId == category.Id).Take(10).ToListAsync();
+            viewModel.newProducts = sameProducts;
+            return View(viewModel);
+ 
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

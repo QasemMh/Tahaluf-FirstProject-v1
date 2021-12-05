@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using Microsoft.AspNetCore.Http;
 #nullable disable
 
 namespace Iam_Influencer.Models
@@ -16,10 +15,13 @@ namespace Iam_Influencer.Models
         public string Lastname { get; set; }
         public string Imagepath { get; set; }
 
-        public virtual Login Login { get; set; }
+ 
 
         [Display(Name = "Profile Picture")]
         [NotMapped]
         public IFormFile Image { get; set; }
+ 
+        public virtual Login Login { get; set; }
+ 
     }
 }
